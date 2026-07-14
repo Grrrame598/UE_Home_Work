@@ -1,0 +1,47 @@
+# UE5 GitIgnore Template
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+*.sln.DotSettings.user
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.pdb
+*.obj
+*.exe
+*.dll
+*.lib
+*.exp
+*.app
+*.ipa
+*.xcodeproj/
+*.xcworkspace/
+
+# Platform specific
+*.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# UE5 specific
+*.uasset.bak
+*.umap.bak
+*.tmp
+
+# Packaging
+Packaged/
+
+# Private documentation
+docs/**/*.md

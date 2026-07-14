@@ -1,0 +1,654 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="ru" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/static/images/favicon.3fd12b3555fa.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Инструкция по работе с GitLab и сдаче домашних заданий - Работа с GitLab · XYZ School</title>
+
+    <script src='https://www.youtube.com/iframe_api' async></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/atom-one-dark.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KBFMG34');</script>
+<!-- End Google Tag Manager -->
+
+    <script>
+	(function(i,s,o,g,r,a,m){
+	i["esSdk"] = r;
+	i[r] = i[r] || function() {
+		(i[r].q = i[r].q || []).push(arguments)
+	}, a=s.createElement(o), m=s.getElementsByTagName(o)[0]; a.async=1; a.src=g;
+	m.parentNode.insertBefore(a,m)}
+	) (window, document, "script", "https://esputnik.com/scripts/v1/public/scripts?apiKey=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0NTI0ZWZhYTJkYzI2MGRmYTM4YTE1NDBlMWFiYmE0ZGQ2YmYxNDBkM2U0NmQ1OWMwMmU3NTg2NmM4Y2Q0ZjAyMmJlM2JmN2E0OGJlYmIyOTMwMGU3MWZlZjgyYzk2NWU1MGJlYjkwMjUwMmM2NGZkZjA2NTAyZTgzNDRmYjU0OGE1Y2JhNjM1MmE2NzIyMDlmODM0YTIyY2IzODc0MjE3MDQ4ZGU0OTE5MTFmNjA1ZGYxNGYifQ.JgsvSTbU-7Sea7Py8wOz8oder0z1HM98KsjUAP00yhRqtscXQlFbw1FDbiShZTCGgvZuSl3YS8tJIjL-ekoUEA&domain=A2F73C22-2C0C-42FA-9FD4-3E5C579725C8", "es");
+	es("pushOn");
+</script>
+
+
+    <link type="text/css" href="/static/bundles/main.4877234b493af3339822.css" rel="stylesheet" />
+    <script type="text/javascript" src="/static/bundles/module_main.16fce12daeb0f7d5d157.js" ></script>
+    <script type="text/javascript" src="/static/bundles/module_embed.16fce12daeb0f7d5d157.js" ></script>
+    <script type="text/javascript" src="/static/bundles/vendor.d0adbd0682db8a5a8dfe.chunk.js" ></script>
+</head>
+
+    <body>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KBFMG34"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+<div id="sidebar-page-wrap" class="toggled">
+    
+
+
+<nav class="navbar fixed-top sidebar" id="sidebar-wrapper" role="navigation">
+    <div class="sidebar__top-wrap">
+        <div class="sidebar__controls">
+            <a href="/ru/courses/geimplei-programmirovanie-1-0/" class="sidebar__back-link truncate">
+                <i class="icon-arrow-back"></i>
+                <span class="sidebar__back-link-text">Работа с GitLab</span>
+            </a>
+            <button class="navbar-toggler border-0 d-lg-none d-block" type="button" data-toggle="offcanvas">
+                <i class="fas fa-lg fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar__task-list navbar-collapse offcanvas-collapse">
+            
+                <a href="/ru/courses/geimplei-programmirovanie-1-0/3641/16556/"
+                class="
+                    sidebar__task-list-item
+                    sidebar__task-list-item_active
+                    sidebar__task-list-item_completed
+                    
+                ">
+
+                
+                    
+                        <i class="icon-text"></i>
+                    
+                
+                <span class="sidebar__task-list-item-text">Инструкция по работе с GitLab и сдаче домашних заданий</span>
+
+                
+                    <span class="sidebar__task-list-item-status sidebar__task-list-item-status_cursor-default" data-toggle="tooltip" data-placement="right" title="Урок пройден">
+                        <i class="icon-check"></i>
+                    </span>
+                
+            </a>
+            
+                <a href="/ru/courses/geimplei-programmirovanie-1-0/3641/16569/"
+                class="
+                    sidebar__task-list-item
+                    
+                    sidebar__task-list-item_completed
+                    
+                ">
+
+                
+                    
+                
+                <span class="sidebar__task-list-item-text">Упражнение. Подготовка GitLab</span>
+
+                
+                    <span class="sidebar__task-list-item-status sidebar__task-list-item-status_cursor-default" data-toggle="tooltip" data-placement="right" title="Урок пройден">
+                        <i class="icon-check"></i>
+                    </span>
+                
+            </a>
+            
+        </div>
+    </div>
+</nav>
+
+    
+    <div id="page-content-wrapper" class="container">
+
+        
+
+
+
+
+        <!-- is new content informer begin -->
+        
+        <!-- is new content informer end -->
+
+        <!-- archive content informer begin -->
+        
+        <!-- archive content informer end -->
+
+        
+
+        
+            
+
+
+
+
+<div class="exercise"
+     data-auto-complete="">
+    <div class="exercise__content-wrap">
+        <div class="content">
+
+            <h1>Инструкция по работе с GitLab и сдаче домашних заданий</h1>
+
+            
+
+            
+
+
+            <div>
+                
+<p>Для сдачи домашних работ на проверку в рамках курса мы будем использовать GitLab — онлайн-сервис для хранения и управления кодом. Инструкцию по установке и подготовке всего необходимого софта ищи ниже.</p>
+<div class="delimiter"></div>
+
+<h1>Git Flow</h1>
+
+<h2>Инструкция по работе с GitLab и сдаче домашних заданий</h2>
+
+<h2>1. Введение</h2>
+
+<p>Git — это система контроля версий, которая позволяет отслеживать изменения в коде и работать над проектом в команде. В рамках курса мы будем использовать GitLab — онлайн-сервис для хранения и управления кодом.</p>
+
+<p>Вы можете использовать <b>консольную версию Git</b>, но также допускается работа с <b>графическими клиентами</b>, такими как <b>Sublime Merge, Fork, TortoiseGit</b> и другие. В реальной практике чаще всего используются графические клиенты, так как они упрощают работу с репозиторием и позволяют быстрее выполнять операции, такие как коммиты, создание веток и разрешение конфликтов.</p>
+<div class="delimiter"></div>
+
+<h2>2. Установка Git</h2>
+
+<p>Git необходимо установить на ваш компьютер, чтобы работать с репозиториями.</p>
+
+<h4>Установка на Windows</h4>
+
+<p><b>1.</b> Перейдите на&nbsp;<a href="https://git-scm.com/downloads">официальный сайт</a>&nbsp;и скачайте последнюю версию установщика.&nbsp;&nbsp;</p>
+
+<p><b>2.</b> Во время установки оставьте параметры по умолчанию, <b>за исключением</b> опции <b>Windows Explorer integration</b>, которую нужно включить для удобного доступа к Git Bash.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/ccjt22n6raxtjejdim9imdq6f4sfaftl.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p><b>3.</b>&nbsp;После установки откройте терминал (Git Bash, PowerShell или командную строку) и выполните команды</p>
+<pre><code class="code">git -v
+git lfs -v</code></pre>
+
+<p>Если отобразилась версия Git, значит установка прошла успешно.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/i1qstk5pax2qiyyao3gnr6l1bdpxm0rp.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<h4>Установка на macOS и Linux</h4>
+
+<p><b>На macOS</b> Git установлен по умолчанию. Для обновления используйте команду:</p>
+<pre><code class="code">brew install git</code></pre>
+
+<p><b>На Linux (Ubuntu/Debian)</b> установите Git с помощью команды:</p>
+<pre><code class="code">sudo apt update &amp;&amp; sudo apt install git</code></pre>
+<div class="delimiter"></div>
+
+<h2>3. Основные термины в Git и GitLab</h2>
+
+<p>Прежде чем приступать к работе, важно понимать основные понятия:</p>
+
+<ul>
+    
+    <li><b>Репозиторий </b>— это хранилище проекта, в котором хранятся все файлы и их изменения.</li>
+    
+    <li><b>Ветка (Branch) </b>— параллельная версия кода. Главная ветка обычно называется main.</li>
+    
+    <li><b>Коммит (Commit)</b> — зафиксированное изменение в коде.</li>
+    
+    <li><b>Push</b> — отправка изменений в удалённый репозиторий.</li>
+    
+    <li><b>Pull </b>— обновление локальной копии проекта последними изменениями.</li>
+    
+    <li><b>Merge Request (MR) </b>— запрос на объединение вашей ветки с основной.</li>
+    
+    <li><b>Конфликт (Merge Conflict) </b>— ситуация, когда изменения в разных ветках затрагивают один и тот же файл.</li>
+    
+    <li><b>Git LFS:&nbsp;</b>По умолчанию Git оптимизирован работать с текстовыми файлами. Но все файлы с которыми вы будете работать в редакторе unreal engine являются бинарными.
+LFS это расширение для Git, которое оптимизирует работу с большими файлами</li>
+    
+</ul>
+<div class="delimiter"></div>
+
+<h2>4. Регистрация в GitLab и создание репозитория</h2>
+
+<h3>Регистрация</h3>
+
+<p><b>1.&nbsp;</b>
+
+Перейдите на <a href="https://gitlab.com/-/trial_registrations/new">страницу регистрации GitLab</a>.&nbsp;&nbsp;</p>
+
+<p><b>2.</b>&nbsp;Создайте аккаунт. После регистрации GitLab предложит заполнить информацию о себе.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/94fpje68ridbsawhqnbotcwoeb071y41.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p><b>3.</b>&nbsp;После этого нужно заполнить информацию о своей компании. Пример заполнения (можно заполнять полностью аналогично):</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/43q8krzxqxz6s64x6ssg9law6m2igv78.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<h4>Создание репозитория</h4>
+
+<p><b>1.&nbsp;</b>После регистрации GItLab предложит создать новый репозиторий</p>
+
+<p><b>2.</b>&nbsp;В поле<b> Project Name</b> введите название проекта (желательно совпадающее с названием игры на Unreal Engine).</p>
+
+<p><b>3.</b>&nbsp;Нажмите <b>Create Project.</b></p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/hth06k46pjzkr2tkpylxw2fu3e1a4vbm.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<h4>Добавление преподавателя в проект</h4>
+
+<p><b>1.</b>&nbsp;После создания проекта GitLab предложит пригласить пользователей в репозиторий.</p>
+
+<p><b>2.&nbsp;</b>Пригласите пользователя XYZTeacher и обязательно выбрать параметр Developer в поле<b> Select maximum role.</b></p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/ntyft3xw7xni60th1lgja1vwd03wdrga.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p>Если вы пропустили этап добавления пользователя в репозиторий, то это можно сделать можно:</p>
+
+<ol>
+    
+    <li>В левой части страницы вашего репозитория нажмите Manage→ Members</li>
+    
+    <li>Нажмите<b> Invite Members.</b></li>
+    
+    <li>Введите <mark><b>XYZTeacher</b></mark> и выберите роль <b>Developer</b>.</li>
+    
+    <li>Нажмите<b> Invite.</b></li>
+    
+</ol>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/nxx8w8hsv6qp494y62xlq14c0mwan5de.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+<div class="delimiter"></div>
+
+<h2>5. Клонирование репозитория</h2>
+
+<p><b>1.</b>&nbsp;Откройте страницу репозитория и скопируйте или <b>HTTPS </b>ссылку.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/ydmywrsj28m6jxdsjkavba4kn9905j0y.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p><b>2.</b>&nbsp;В терминале выполните команду:</p>
+<pre><code class="code">git clone &lt;URL вашего репозитория&gt;</code></pre>
+
+<p>Пример финальной команды:</p>
+<pre><code class="code">git clone https://gitlab.com/xyz1360706/GameCode.git</code></pre>
+
+<p><b>3.</b>&nbsp;При первом клонировании может потребоваться авторизация через браузер.<br>Если выполнять clone через консоль, то откроется окно  в котором нужно нажать “Sign In with your browser”.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/l4p5523oiybjm0oi2g6zco3mmowf5otr.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p>Выполнить авторизацию в браузере и нажать кнопку “Authorize Git Credential Manager”.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/s9hqg1mvgry24cizs9prsqda8yhi0lk3.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+<div class="delimiter"></div>
+
+<h2>6. Настройка репозитория для UE</h2>
+
+<p>После того как вы склонировали к себе репозитрий его необходимо настроить для использования с unreal engine проектом.</p>
+
+<p>Для этого нужно:</p>
+
+<p><b>1.&nbsp;</b>Скачать и добавить в корень репозитория файл <a href="https://cdn2.school-xyz.com/courses/Gameplay%20programming/gitignore">.<b>gitignore</b></a>. Этот файл добавляет в игнор git временные файлы которые генерирует unreal engine и IDE во время работы.</p>
+
+<p><b>2.&nbsp;</b>Добавить в корень репозитория файл <b><a href="https://cdn2.school-xyz.com/courses/Gameplay%20programming/gitattributes">.gitattributes</a>. </b><br>Файл .gitattributes активирует расширение git lfs которое оптимизирует работы гита с большими/бинарными файлами.</p>
+
+<p>После этого нужно перенести все файлы из вашей папки с ue проектом (или создать его) в корневой папке вашего репозитория.</p>
+
+<p>В результате корневая папка вашего репозитория должна выглядеть следующим образом:</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/ke19z66arhoudg6y7icujwormchg1nko.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p>Пример репозитория вы можете посмотреть по этой ссылке:</p>
+<div class="card mb-3 link-tool">
+    <div class="card-body">
+        <div class="media">
+            <div class="media-body">
+                <h4 class="mt-0 mb-1">XYZ / GameCode · GitLab</h4>
+                GitLab.com
+            </div>
+            
+            <img src="https://cdn2.school-xyz.com/media/editor_thumbs/3oxlzo0j4rnvhg7v0wf8t97bj2d4h9jg" style="width: 64px; height: 64px;" class="ml-3" alt="" />
+            
+        </div>
+        
+        <a href="https://gitlab.com/xyz1360706/GameCode" class="text-muted stretched-link" target="_blank">gitlab.com</a>
+        
+    </div>
+</div>
+<div class="delimiter"></div>
+
+<h2>7. Порядок сдачи домашнего задания</h2>
+
+<h4>Что такое Merge Request и зачем он нужен?</h4>
+
+<p>Merge Request (MR) — это запрос на объединение изменений из одной ветки в другую. Это основной инструмент для работы в команде и проверки кода перед добавлением его в основную ветку. В рамках курса MR будет использоваться для проверки ваших домашних заданий. Преподаватель сможет оставить комментарии и запросить исправления, если это необходимо. После одобрения Merge Request изменения будут добавлены в основную ветку проекта.</p>
+
+<h4>Почему важно создавать отдельные ветки для домашних заданий?</h4>
+
+<p>Создание отдельных веток для каждой домашней работы помогает структурировать работу и избежать путаницы в коде. Это удобно, потому что:</p>
+
+<ul>
+    
+    <li><b>Изолированность изменений</b> — работа над новым заданием не затрагивает основной код проекта.</li>
+    
+    <li><b>Легкость исправлений </b>— если преподаватель попросит внести правки, можно просто обновить ветку, не влияя на другие задания.</li>
+    
+    <li><b>Чистота истории коммитов</b> — каждое задание имеет свою ветку, что делает историю коммитов более понятной.</li>
+    
+    <li><b>Безопасность кода</b> — ошибки в новой функции или механике не попадут в основную ветку до полного одобрения преподавателем.</li>
+    
+</ul>
+
+<h2>7.1. Создание новой ветки</h2>
+
+<p>Перед началом выполнения задания создайте новую ветку, чтобы изолировать изменения:</p>
+<pre><code class="code">git checkout -b Homework1</code></pre>
+
+<h2>7.2. Выполнение задания и отправка изменений</h2>
+
+<p>1.&nbsp;После внесения изменений зафиксируйте их командой:</p>
+<pre><code class="code">git add .
+git commit -m &quot;Homework 1 completed&quot;</code></pre>
+
+<p>2.&nbsp;Отправьте изменения в репозиторий:</p>
+<pre><code class="code">git push origin Homework1</code></pre>
+
+<h2>7.3. Создание Merge Request (MR)</h2>
+
+<p>1.&nbsp;Откройте страницу репозитория на GitLab.</p>
+
+<p>2.&nbsp;В разделе<b> Code</b> выберите <b>Merge Requests → New Merge Request.</b></p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/zh8rr69s3cmvu063zgq4zh331q993ygt.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/snarftcuerknywirm5ngh9k12h2a9f2k.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p>3.&nbsp;В <b>Source branch </b>выберите вашу ветку (<b><mark>Homework1</mark></b>). В <b>Target branch</b> выберите <b><mark>main</mark></b>.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/mamyuxr8ernl9t88ozh61qo4v1buawpm.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<p><b>4.&nbsp;</b>Заполните основную информацию о MR:<br>ᅠ a.&nbsp;В поле<b> Title</b> укажите название (например, <b><mark>Homework 1</mark></b>).<br>ᅠ b.&nbsp;В поле Description опционально можно комментарий для преподавателя. Либо оставить это поле пустым<br>ᅠ c.&nbsp;В поле <b>Assignees</b> нужно нажать кнопку “Assign to me”<br>ᅠᅠ  i.&nbsp;Это поле указывает на того кто ответственен на создание MR<br>ᅠ d.&nbsp;В поле <b>Reviewers</b> выберите преподавателя <b><mark>XYZTeacher</mark></b>.<br>ᅠᅠ  i.&nbsp;Reviewer это человек который ответственен за проверку изменений в вашем MR</p>
+
+<p><b>5.</b>&nbsp;Нажмите <b>Create Merge Request</b>.</p>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/bh4ol0jcb9a4w5z7vv51fm7eugnn7aq2.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+<h2>7.4. Отправка Merge Request на проверку</h2>
+
+<p><b>1.</b>&nbsp;Скопируйте URL созданного MR.</p>
+
+<p><b>2.</b>&nbsp;Вставьте ссылку в форму сдачи на платформе XYZ.</p>
+
+<h2>7.5. Внесение исправлений</h2>
+
+<p>Если преподаватель оставил комментарии с просьбой исправить код:</p>
+
+<p><b>1.</b>&nbsp;Внесите изменения.</p>
+
+<p><b>2.&nbsp;</b>Зафиксируйте их командой:</p>
+<pre><code class="code">git add .
+git commit -m &quot;Fixed issues in Homework 1&quot;
+git push origin Homework1</code></pre>
+
+<p>Изменения автоматически обновятся в том же MR.</p>
+
+<h2>7.6. Завершение Merge Request</h2>
+
+<p>Если задание принято:</p>
+
+<p>1.&nbsp;Нажмите <b>Merge </b>на странице MR в GitLab.</p>
+
+<p>2.&nbsp;Переключитесь на <b><mark>main</mark></b> и обновите локальный репозиторий:</p>
+<pre><code class="code">git checkout main
+git pull origin main</code></pre>
+
+<figure class="figure">
+    <img
+        src="https://cdn2.school-xyz.com/media/files/3gq2m5ze9oealna44zsuqgw7hz4pem8t.png"
+        class="editor-img figure-img rounded  "
+        alt=""
+    />
+    
+</figure>
+
+            </div>
+
+            
+
+            
+                
+            
+        </div>
+    </div>
+</div>
+
+
+            
+                
+<div class="modal" tabindex="-1" role="dialog" id="complete-modal">
+    <div class="modal-dialog" style="min-width: 35.9375rem;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Работа с GitLab</h5>
+                <a href="/ru/courses/geimplei-programmirovanie-1-0/3641/16556/next"
+                    class="close">
+                    <span>&times;</span>
+                </a>
+            </div>
+            <div class="modal-body">
+                <h1 class="modal__content-title">Урок пройден!</h1>
+                <form id="rating_form"
+                    action="/ru/courses/geimplei-programmirovanie-1-0/3641/rate/">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="I1Dk40T55Msxq4ubT61Y82QcrpjGiwIZ4iJKe2dt9WmHjT6FUYPPSad1IllSa8kW">
+                    <div class="modal__rate-wrap">
+                        <div class="modal__rate-wrap-label">Вам понравился урок?</div>
+                        <fieldset class="rating">
+                            <input type="radio" id="star5" name="rating" value="5" />
+                            <label class="full" for="star5" title="5 звезд"></label>
+
+                            <input type="radio" id="star4half" name="rating" value="4.5" />
+                            <label class="half" for="star4half" title="4.5 звезд"></label>
+
+                            <input type="radio" id="star4" name="rating" value="4" />
+                            <label class="full" for="star4" title="4 звезды"></label>
+
+                            <input type="radio" id="star3half" name="rating" value="3.5" />
+                            <label class="half" for="star3half" title="3.5 звезд"></label>
+
+                            <input type="radio" id="star3" name="rating" value="3" />
+                            <label class="full" for="star3" title="3 звезды"></label>
+
+                            <input type="radio" id="star2half" name="rating" value="2.5" />
+                            <label class="half" for="star2half" title="2.5 звезд"></label>
+
+                            <input type="radio" id="star2" name="rating" value="2" />
+                            <label class="full" for="star2" title="2 звезды"></label>
+
+                            <input type="radio" id="star1half" name="rating" value="1.5" />
+                            <label class="half" for="star1half" title="1.5 звезды"></label>
+
+                            <input type="radio" id="star1" name="rating" value="1" />
+                            <label class="full" for="star1" title="1 звезда"></label>
+
+                            <input type="radio" id="starhalf" name="rating" value="0.5" />
+                            <label class="half" for="starhalf" title="0.5 звезды"></label>
+                        </fieldset>
+                    </div>
+                    <textarea class="modal__textarea" name="comment" placeholder="Комментарий"></textarea>
+                    <div class="modal__btn-group">
+                        <a class="btn" href="/ru/courses/geimplei-programmirovanie-1-0/3641/retry/">Пройти заново</a>
+                        <button type="submit" id="submit-rating" class="modal__action-btn">Следующий урок</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+            
+        
+    </div>
+    
+
+    
+
+
+<div class="bottom-fixed-bar">
+    <div class="bottom-fixed-bar__status-wrap">
+        
+    </div>
+    
+        
+            <a 
+                href="/ru/courses/geimplei-programmirovanie-1-0/3641/16556/next"
+              class="bottom-fixed-bar__btn">
+              Далее
+              
+              
+            </a>
+        
+    
+</div>
+
+</div>
+
+<script>
+    XYZ_PAGE = 'content';
+    COURSE_ID = 269;
+    SECTION_ID = 1053;
+    LECTURE_ID = 3641;
+    CONTENT_ID = 16556;
+</script>
+
+
+<script>
+    USER_ID = 34713;
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
+
+
+</body>
+</html>
