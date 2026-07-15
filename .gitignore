@@ -45,3 +45,4 @@ Packaged/
 
 # Private documentation
 docs/**/*.md
+docs/**/*.html
