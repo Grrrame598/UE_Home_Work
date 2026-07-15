@@ -9,7 +9,8 @@ public class MyProjectTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_1;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+		CppStandard = CppStandardVersion.Cpp20;
 		ExtraModuleNames.Add("MyProject");
 	}
 }
