@@ -36,7 +36,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* PlatformMesh;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, meta = (MakeEditWidget))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MakeEditWidget))
 	FVector EndLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient)
