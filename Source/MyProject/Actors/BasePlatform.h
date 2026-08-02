@@ -30,7 +30,7 @@ public:
 	UFUNCTION()
 	void PlatformTimelineUpdate(float Alpha);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnPlatformTriggered();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
