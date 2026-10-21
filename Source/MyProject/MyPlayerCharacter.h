@@ -9,6 +9,7 @@
 
 class UInputMappingContext;
 class UInputAction;
+class UCharacterEquipmentComponent;
 
 /**
  * Собственный персонаж для задания «Продвинутое перемещение» (плавание).
@@ -59,10 +60,27 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* SwimMappingContext;
 
+	/** Fire Input Action: левая кнопка мыши / правый триггер геймпада */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
+
+	/** Надеть/снять оружие (Q) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ToggleWeaponAction;
+
+	/** Переключение типа выстрела камера/дуло (R) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ToggleShotOriginAction;
+
+	/** Mapping context для оружия (Fire / ToggleWeapon) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* WeaponMappingContext;
+
 public:
 	AMyPlayerCharacter();
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void NotifyControllerChanged() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual bool CanJumpInternal_Implementation() const override;
@@ -82,6 +100,18 @@ protected:
 	/** Плавание: вверх/вниз по мировому Up */
 	void SwimUp(const FInputActionValue& Value);
 
+	/** Создаёт IA_Fire / IA_ToggleWeapon и WeaponMappingContext, если не назначены в BP */
+	void EnsureWeaponInputDefaults();
+
+	/** Нажатие кнопки выстрела — пробрасывается в текущее оружие */
+	void Fire();
+
+	/** Надеть/снять оружие */
+	void ToggleWeapon();
+
+	/** Переключить тип выстрела (камера / дуло) */
+	void ToggleShotOrigin();
+
 	/**
 	 * Создает дефолтные InputAction и MappingContext для наземного управления и плавания,
 	 * если они не назначены в Blueprint. Нужно, чтобы механика работала без редакторских ассетов.
@@ -93,4 +123,28 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	/** Returns CharacterEquipmentComponent subobject **/
+	FORCEINLINE class UCharacterEquipmentComponent* GetCharacterEquipmentComponent() const { return CharacterEquipmentComponent; }
+
+	/**
+	 * Включает/выключает режим стрейфа (как в референсном проекте: bIsStrafing = !bOrientRotationToMovement).
+	 * В стрейфе корпус всегда смотрит по камере (bUseControllerRotationYaw = true), а WASD уводит
+	 * перемещение в ноги — благодаря этому Direction в бленд-спейсе становится ненулевым
+	 * и играются боковые/задние анимации вместо простого доворота персонажа.
+	 */
+	void SetStrafeMode(bool bEnabled);
+
+	/** Активен ли режим стрейфа (стрейф-локомоция) */
+	UFUNCTION(BlueprintPure, Category = "Character | Movement")
+	bool IsStrafing() const { return bIsStrafing; }
+
+	/** Компонент экипировки: выдает оружие и переключает его наличие */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
+	class UCharacterEquipmentComponent* CharacterEquipmentComponent;
+
+protected:
+	/** Режим стрейфа включён (персонаж с оружием: корпус по камере, ноги — в сторону движения) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Movement")
+	bool bIsStrafing = false;
 };
