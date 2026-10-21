@@ -8,6 +8,10 @@ public class MyProject : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", "Niagara" });
+
+		// В модуле нет папок Public/Private, поэтому UE не добавляет корень модуля в include-пути.
+		// Без этого не находятся include вида "Types/MyProjectTypes.h" из подпапок (Actors/, Animation/, Components/).
+		PrivateIncludePaths.Add(ModuleDirectory);
 	}
 }
