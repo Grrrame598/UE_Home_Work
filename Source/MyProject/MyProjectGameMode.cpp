@@ -1,15 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MyProjectGameMode.h"
-#include "MyProjectCharacter.h"
-#include "UObject/ConstructorHelpers.h"
+#include "MyPlayerCharacter.h"
 
 AMyProjectGameMode::AMyProjectGameMode()
 {
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+	// Use our custom swimming character as the default pawn.
+	// After creating BP_MyPlayerCharacter you can switch DefaultPawnClass to it in the editor.
+	DefaultPawnClass = AMyPlayerCharacter::StaticClass();
 }
