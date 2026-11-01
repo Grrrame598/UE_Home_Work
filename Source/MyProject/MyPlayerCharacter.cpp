@@ -19,6 +19,7 @@
 #include "InputModifiers.h"
 #include "UObject/ConstructorHelpers.h"
 #include "UObject/UObjectGlobals.h"
+#include "Components/CharacterComponents/CharacterEquipmentComponent.h"
 
 
 AMyPlayerCharacter::AMyPlayerCharacter()
@@ -55,6 +56,9 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	// Компонент экипировки: выдает персонажу оружие (класс задаётся в BP персонажа)
+	CharacterEquipmentComponent = CreateDefaultSubobject<UCharacterEquipmentComponent>(TEXT("CharacterEquipment"));
 
 	// Существующие меш и AnimBP проекта (Manny)
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SKManny(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny"));
@@ -108,11 +112,46 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	}
 }
 
+void AMyPlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Оружие может быть надето сразу (bEquipOnStart) — тогда стрейф должен быть включён с первого кадра
+	if (CharacterEquipmentComponent && CharacterEquipmentComponent->IsEquipped())
+	{
+		SetStrafeMode(true);
+	}
+}
+
+void AMyPlayerCharacter::SetStrafeMode(bool bEnabled)
+{
+	if (bIsStrafing == bEnabled)
+	{
+		return;
+	}
+
+	bIsStrafing = bEnabled;
+
+	// Разворот корпуса по камере + отключение доворота по движению = стрейф-локомоция:
+	// WASD уходит в ноги, Direction (CalculateDirection) в бленд-спейсе перестаёт быть нулём.
+	bUseControllerRotationYaw = bEnabled;
+	GetCharacterMovement()->bOrientRotationToMovement = !bEnabled;
+
+	// При входе в стрейф мгновенно доворачиваем корпус по камере,
+	// иначе персонажа «закрутит» через Blend Poses / старый yaw.
+	if (bEnabled && Controller)
+	{
+		const FRotator DesiredRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
+		SetActorRotation(DesiredRotation);
+	}
+}
+
 void AMyPlayerCharacter::NotifyControllerChanged()
 {
 	Super::NotifyControllerChanged();
 
 	EnsureInputDefaults();
+	EnsureWeaponInputDefaults();
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -126,6 +165,11 @@ void AMyPlayerCharacter::NotifyControllerChanged()
 			if (SwimMappingContext)
 			{
 				Subsystem->AddMappingContext(SwimMappingContext, 0);
+			}
+
+			if (WeaponMappingContext)
+			{
+				Subsystem->AddMappingContext(WeaponMappingContext, 0);
 			}
 		}
 	}
@@ -262,6 +306,21 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		if (SwimUpAction)
 		{
 			EnhancedInputComponent->BindAction(SwimUpAction, ETriggerEvent::Triggered, this, &AMyPlayerCharacter::SwimUp);
+		}
+
+		if (FireAction)
+		{
+			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::Fire);
+		}
+
+		if (ToggleWeaponAction)
+		{
+			EnhancedInputComponent->BindAction(ToggleWeaponAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::ToggleWeapon);
+		}
+
+		if (ToggleShotOriginAction)
+		{
+			EnhancedInputComponent->BindAction(ToggleShotOriginAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::ToggleShotOrigin);
 		}
 	}
 }
