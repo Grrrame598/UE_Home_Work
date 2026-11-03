@@ -64,6 +64,10 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
 
+	/** Альтернативный выстрел: правая кнопка мыши (подствольник) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AltFireAction;
+
 	/** Надеть/снять оружие (Q) */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ToggleWeaponAction;
@@ -105,6 +109,9 @@ protected:
 
 	/** Нажатие кнопки выстрела — пробрасывается в текущее оружие */
 	void Fire();
+
+	/** Правая кнопка мыши — альтернативный выстрел (снаряд из подствольника) */
+	void AltFire();
 
 	/** Надеть/снять оружие */
 	void ToggleWeapon();
