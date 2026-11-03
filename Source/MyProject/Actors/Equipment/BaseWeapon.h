@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Actors/Equipment/EquipableItem.h"
 #include "Types/MyProjectTypes.h"
 #include "BaseWeapon.generated.h"
 
@@ -18,7 +18,7 @@ class UWeaponBarellComponent;
  * (анимации, боезапас и т.п.) и при необходимости переопределяют точку выстрела.
  */
 UCLASS(Abstract)
-class MYPROJECT_API ABaseWeapon : public AActor
+class MYPROJECT_API ABaseWeapon : public AEquipableItem
 {
 	GENERATED_BODY()
 
@@ -29,9 +29,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	virtual void Shot();
 
+	/**
+	 * Альтернативный выстрел (ПКМ). База ничего не делает:
+	 * переопределяет оружие, у которого есть подствольник (ARangeWeaponItem).
+	 */
+	virtual void AltShot();
+
 	/** Тип предмета — по нему AnimBP персонажа выбирает позу (есть оружие / нет) */
 	UFUNCTION(BlueprintPure, Category = "Weapon")
-	EEquipableItemType GetItemType() const { return ItemType; }
+	EEquipableItemType GetWeaponItemType() const { return GetItemType(); }
 
 protected:
 	/**
@@ -48,10 +54,6 @@ protected:
 	/** Ствол = точка выстрела. Крепится к мешу без сокета, позиция подбирается в BP */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon|Components")
 	UWeaponBarellComponent* WeaponBarell;
-
-	/** Тип предмета для анимаций персонажа */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-	EEquipableItemType ItemType = EEquipableItemType::None;
 
 	/** Откуда производится выстрел: из камеры игрока или из дула оружия (в игре переключается клавишей R) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Shot")

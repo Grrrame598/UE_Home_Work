@@ -15,6 +15,12 @@
 /** Сокет на скелете персонажа, к которому крепится оружие (правая кисть) */
 const FName SocketCharacterWeapon = FName("CharacterWeaponSocket");
 
+/** Сокет у бедра: сюда вешается пистолет в кабуре (кость thigh_r) */
+const FName SocketCharacterSideArm = FName("CharacterSideArmSocket");
+
+/** Сокет на спине: сюда вешается винтовка за спиной (кость spine_03) */
+const FName SocketCharacterBack = FName("CharacterBackSocket");
+
 /** Имя параметра Niagara, куда передаём конец трассы пули */
 const FName FXParamTraceEnd = FName("TraceEnd");
 
@@ -23,7 +29,9 @@ UENUM(BlueprintType)
 enum class EEquipableItemType : uint8
 {
 	None,
-	Pistol
+	Pistol,
+	/** Автомат: есть подствольник с альтернативным выстрелом снарядом */
+	Rifle
 };
 
 /** Откуда производится выстрел (рекомендация из задания: два типа выстрелов) */

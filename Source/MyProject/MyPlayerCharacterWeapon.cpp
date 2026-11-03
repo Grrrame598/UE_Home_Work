@@ -20,6 +20,13 @@ void AMyPlayerCharacter::EnsureWeaponInputDefaults()
 		FireAction->bConsumeInput = false;
 	}
 
+	if (!AltFireAction)
+	{
+		AltFireAction = NewObject<UInputAction>(this, TEXT("AltFireAction"));
+		AltFireAction->ValueType = EInputActionValueType::Boolean;
+		AltFireAction->bConsumeInput = false;
+	}
+
 	if (!ToggleWeaponAction)
 	{
 		ToggleWeaponAction = NewObject<UInputAction>(this, TEXT("ToggleWeaponAction"));
@@ -42,6 +49,9 @@ void AMyPlayerCharacter::EnsureWeaponInputDefaults()
 		WeaponMappingContext->MapKey(FireAction, EKeys::LeftMouseButton);
 		WeaponMappingContext->MapKey(FireAction, EKeys::Gamepad_RightTrigger);
 
+		// Альтернативный выстрел (подствольник): правая кнопка мыши
+		WeaponMappingContext->MapKey(AltFireAction, EKeys::RightMouseButton);
+
 		// Надеть/снять оружие: Q
 		WeaponMappingContext->MapKey(ToggleWeaponAction, EKeys::Q);
 
@@ -58,11 +68,19 @@ void AMyPlayerCharacter::Fire()
 	}
 }
 
+void AMyPlayerCharacter::AltFire()
+{
+	if (CharacterEquipmentComponent)
+	{
+		CharacterEquipmentComponent->AltFire();
+	}
+}
+
 void AMyPlayerCharacter::ToggleWeapon()
 {
 	if (CharacterEquipmentComponent)
 	{
-		CharacterEquipmentComponent->ToggleEquip();
+		CharacterEquipmentComponent->SwitchToNextWeapon();
 
 		// С оружием — стрейф-локомоция (корпус по камере), без оружия — обычный бег
 		// с доворотом по направлению движения (как в референсном проекте).

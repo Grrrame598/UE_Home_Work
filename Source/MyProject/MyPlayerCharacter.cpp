@@ -313,6 +313,11 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::Fire);
 		}
 
+		if (AltFireAction)
+		{
+			EnhancedInputComponent->BindAction(AltFireAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::AltFire);
+		}
+
 		if (ToggleWeaponAction)
 		{
 			EnhancedInputComponent->BindAction(ToggleWeaponAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::ToggleWeapon);
