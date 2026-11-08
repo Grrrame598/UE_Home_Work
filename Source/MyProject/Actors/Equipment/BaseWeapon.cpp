@@ -66,6 +66,11 @@ void ABaseWeapon::Shot()
 	WeaponBarell->Shot(ShotStart, ShotDirection, InstigatorController);
 }
 
+void ABaseWeapon::AltShot()
+{
+	UE_LOG(LogTemp, Warning, TEXT("[%s] AltShot: у этого оружия нет альтернативного выстрела"), *GetName());
+}
+
 void ABaseWeapon::ToggleShotOrigin()
 {
 	// Рекомендация из задания: два типа выстрела — из камеры игрока и из дула оружия
