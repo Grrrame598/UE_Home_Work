@@ -3,7 +3,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/TimelineComponent.h"
-#include "PlatformTrigger.h"
+
+class APlatformTrigger;
 #include "BasePlatform.generated.h"
 
 UENUM(BlueprintType)

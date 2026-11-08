@@ -2,6 +2,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Curves/CurveFloat.h"
 #include "Components/TimelineComponent.h"
+#include "PlatformTrigger.h"
 
 ABasePlatform::ABasePlatform()
 {
