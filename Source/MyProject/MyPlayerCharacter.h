@@ -99,6 +99,24 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 public:
 	AMyPlayerCharacter();
 
+
+	/** Спринт: ускорение + флаг для AnimBP */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void StartSprint();
+
+	/** Конец спринта: вернуть обычную скорость (зовётся и из компонента атрибутов на нуле стамины) */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void StopSprint();
+
+	/** Запрет бега извне (зона замедления, B2) */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void SetSprintSuppressed(bool bSuppressed) { bCanSprintSuppressed = !bSuppressed; }
+
+	/** Множитель скорости ходьбы (1.0 — обычная). Зона замедления ставит 0.5 */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void ApplySpeedMultiplier(float Multiplier);
+
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void NotifyControllerChanged() override;
@@ -130,15 +148,6 @@ protected:
 	/** Создаёт IA_Fire / IA_ToggleWeapon и WeaponMappingContext, если не назначены в BP */
 	void EnsureWeaponInputDefaults();
 
-	/** Спринт: ускорение + флаг для AnimBP */
-	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
-	void StartSprint();
-
-	/** Конец спринта: вернуть обычную скорость */
-	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
-	void StopSprint();
-
-	/** Переключить присед (LeftCtrl) */
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
 	void ChangeCrouchState();
 
@@ -188,6 +197,9 @@ public:
 	/** Returns CharacterEquipmentComponent subobject **/
 	FORCEINLINE class UCharacterEquipmentComponent* GetCharacterEquipmentComponent() const { return CharacterEquipmentComponent; }
 
+	/** Returns CharacterAttributesComponent subobject (HP, стамина) **/
+	FORCEINLINE class UCharacterAttributesComponent* GetCharacterAttributesComponent() const { return CharacterAttributesComponent; }
+
 	/**
 	 * Включает/выключает режим стрейфа (как в референсном проекте: bIsStrafing = !bOrientRotationToMovement).
 	 * В стрейфе корпус всегда смотрит по камере (bUseControllerRotationYaw = true), а WASD уводит
@@ -204,6 +216,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
 	class UCharacterEquipmentComponent* CharacterEquipmentComponent;
 
+	/** Компонент атрибутов: HP и стамина (A3) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Components")
+	class UCharacterAttributesComponent* CharacterAttributesComponent;
+
 protected:
 	/** Режим стрейфа включён (персонаж с оружием: корпус по камере, ноги — в сторону движения) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Movement")
@@ -212,4 +228,7 @@ protected:
 	/** Бег включён (для AnimBP и стамины в A3) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Movement")
 	bool bIsSprinting = false;
+
+	/** Бег запрещён снаружи (зона замедления, B2) */
+	bool bCanSprintSuppressed = false;
 };

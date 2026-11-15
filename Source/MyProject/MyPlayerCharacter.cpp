@@ -21,6 +21,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "UObject/UObjectGlobals.h"
 #include "Components/CharacterComponents/CharacterEquipmentComponent.h"
+#include "Components/CharacterComponents/CharacterAttributesComponent.h"
 
 
 AMyPlayerCharacter::AMyPlayerCharacter()
@@ -64,6 +65,9 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
 	// Компонент экипировки: выдает персонажу оружие (класс задаётся в BP персонажа)
 	CharacterEquipmentComponent = CreateDefaultSubobject<UCharacterEquipmentComponent>(TEXT("CharacterEquipment"));
+
+	// Атрибуты персонажа (A3): HP и стамина
+	CharacterAttributesComponent = CreateDefaultSubobject<UCharacterAttributesComponent>(TEXT("CharacterAttributes"));
 
 	// Существующие меш и AnimBP проекта (Manny)
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SKManny(TEXT("/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny"));
@@ -457,8 +461,12 @@ bool AMyPlayerCharacter::CanJumpInternal_Implementation() const
 
 bool AMyPlayerCharacter::CanSprint() const
 {
-	// В воде и в приседе не бежим; стамина проверяется в A3 через компонент атрибутов
-	if (GetCharacterMovement()->IsSwimming() || bIsCrouched)
+	// В воде и в приседе не бежим; стамина проверяется через компонент атрибутов (A3)
+	if (GetCharacterMovement()->IsSwimming() || bIsCrouched || bCanSprintSuppressed)
+	{
+		return false;
+	}
+	if (CharacterAttributesComponent && !CharacterAttributesComponent->HasStamina())
 	{
 		return false;
 	}
@@ -474,7 +482,19 @@ void AMyPlayerCharacter::StartSprint()
 
 	bIsSprinting = true;
 	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	if (CharacterAttributesComponent)
+	{
+		CharacterAttributesComponent->SetSprinting(true);
+	}
 	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s -> Sprint (%.0f)"), *GetName(), SprintSpeed);
+}
+
+void AMyPlayerCharacter::ApplySpeedMultiplier(float Multiplier)
+{
+	const float NewSpeed = BaseWalkSpeed * FMath::Clamp(Multiplier, 0.1f, 1.f);
+	GetCharacterMovement()->MaxWalkSpeed = bIsSprinting ? SprintSpeed : NewSpeed;
+	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s скорость ходьбы %.0f (множитель %.2f)"),
+	       *GetName(), NewSpeed, Multiplier);
 }
 
 void AMyPlayerCharacter::StopSprint()
@@ -486,6 +506,10 @@ void AMyPlayerCharacter::StopSprint()
 
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	if (CharacterAttributesComponent)
+	{
+		CharacterAttributesComponent->SetSprinting(false);
+	}
 	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s -> Walk (%.0f)"), *GetName(), BaseWalkSpeed);
 }
 
