@@ -17,6 +17,7 @@
 #include "InputCoreTypes.h"
 #include "InputMappingContext.h"
 #include "InputModifiers.h"
+#include "MyProject.h"
 #include "UObject/ConstructorHelpers.h"
 #include "UObject/UObjectGlobals.h"
 #include "Components/CharacterComponents/CharacterEquipmentComponent.h"
@@ -38,9 +39,13 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+	// Присед: работает без «нажатой» клавиши и без NavAgent-проверок в редакторе
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	GetCharacterMovement()->SetCrouchedHalfHeight(50.f);
 
 	// Параметры плавания
 	GetCharacterMovement()->MaxSwimSpeed = 300.f;
@@ -228,6 +233,23 @@ void AMyPlayerCharacter::EnsureInputDefaults()
 
 		// IA_Jump: Space
 		GroundMappingContext->MapKey(JumpAction, EKeys::SpaceBar);
+
+		// Спринт (hold) и присед (toggle)
+		if (!SprintAction)
+		{
+			SprintAction = NewObject<UInputAction>(this, TEXT("SprintAction"));
+			SprintAction->ValueType = EInputActionValueType::Boolean;
+			SprintAction->bConsumeInput = false;
+		}
+		GroundMappingContext->MapKey(SprintAction, EKeys::LeftShift);
+
+		if (!CrouchAction)
+		{
+			CrouchAction = NewObject<UInputAction>(this, TEXT("CrouchAction"));
+			CrouchAction->ValueType = EInputActionValueType::Boolean;
+			CrouchAction->bConsumeInput = false;
+		}
+		GroundMappingContext->MapKey(CrouchAction, EKeys::LeftControl);
 	}
 
 	// --- Плавание ---
@@ -306,6 +328,17 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		if (SwimUpAction)
 		{
 			EnhancedInputComponent->BindAction(SwimUpAction, ETriggerEvent::Triggered, this, &AMyPlayerCharacter::SwimUp);
+		}
+
+		if (SprintAction)
+		{
+			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::OnSprintStarted);
+			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMyPlayerCharacter::OnSprintCompleted);
+		}
+
+		if (CrouchAction)
+		{
+			EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::ChangeCrouchState);
 		}
 
 		if (FireAction)
@@ -395,6 +428,22 @@ void AMyPlayerCharacter::SwimUp(const FInputActionValue& Value)
 	}
 }
 
+void AMyPlayerCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	const EMovementMode CurrentMode = GetCharacterMovement()->MovementMode;
+
+	if (CurrentMode == MOVE_Swimming && PrevMovementMode != MOVE_Swimming)
+	{
+		UE_LOG(LogMyProject, Log, TEXT("[Water] %s -> Swimming"), *GetName());
+	}
+	else if (PrevMovementMode == MOVE_Swimming && CurrentMode != MOVE_Swimming)
+	{
+		UE_LOG(LogMyProject, Log, TEXT("[Water] %s -> Walking (выход из воды)"), *GetName());
+	}
+}
+
 bool AMyPlayerCharacter::CanJumpInternal_Implementation() const
 {
 	// В воде прыжок как на суше запрещаем
@@ -405,3 +454,90 @@ bool AMyPlayerCharacter::CanJumpInternal_Implementation() const
 
 	return Super::CanJumpInternal_Implementation();
 }
+
+bool AMyPlayerCharacter::CanSprint() const
+{
+	// В воде и в приседе не бежим; стамина проверяется в A3 через компонент атрибутов
+	if (GetCharacterMovement()->IsSwimming() || bIsCrouched)
+	{
+		return false;
+	}
+	return GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling();
+}
+
+void AMyPlayerCharacter::StartSprint()
+{
+	if (!CanSprint())
+	{
+		return;
+	}
+
+	bIsSprinting = true;
+	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s -> Sprint (%.0f)"), *GetName(), SprintSpeed);
+}
+
+void AMyPlayerCharacter::StopSprint()
+{
+	if (!bIsSprinting)
+	{
+		return;
+	}
+
+	bIsSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s -> Walk (%.0f)"), *GetName(), BaseWalkSpeed);
+}
+
+void AMyPlayerCharacter::OnSprintStarted()
+{
+	StartSprint();
+}
+
+void AMyPlayerCharacter::OnSprintCompleted()
+{
+	StopSprint();
+}
+
+void AMyPlayerCharacter::ChangeCrouchState()
+{
+	// В воде присед не работает: LeftCtrl там занят погружением (SwimUp -1)
+	if (GetCharacterMovement()->IsSwimming())
+	{
+		return;
+	}
+
+	if (bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Crouch();
+	}
+}
+
+void AMyPlayerCharacter::OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
+{
+	Super::OnStartCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
+
+	// Камера едет вместе с капсулой: присели — опускаем spring arm на половину разницы высот
+	if (CameraBoom)
+	{
+		CameraBoom->TargetOffset.Z += ScaledHalfHeightAdjust;
+	}
+	StopSprint();
+	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s -> Crouch"), *GetName());
+}
+
+void AMyPlayerCharacter::OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
+{
+	Super::OnEndCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
+
+	if (CameraBoom)
+	{
+		CameraBoom->TargetOffset.Z -= ScaledHalfHeightAdjust;
+	}
+	UE_LOG(LogMyProject, Log, TEXT("[Movement] %s -> Stand"), *GetName());
+}
+

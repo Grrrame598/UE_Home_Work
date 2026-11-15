@@ -80,6 +80,22 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* WeaponMappingContext;
 
+	/** Спринт (LeftShift, удержание) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	/** Присед (LeftCtrl, переключение) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction;
+
+	/** Скорость спринта, см/с */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Movement", meta = (AllowPrivateAccess = "true"))
+	float SprintSpeed = 800.f;
+
+	/** Обычная скорость ходьбы, см/с (к ней возвращаемся после спринта) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Movement", meta = (AllowPrivateAccess = "true"))
+	float BaseWalkSpeed = 500.f;
+
 public:
 	AMyPlayerCharacter();
 
@@ -88,6 +104,13 @@ protected:
 	virtual void NotifyControllerChanged() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual bool CanJumpInternal_Implementation() const override;
+
+	/**
+	 * Лог входа/выхода из воды (шаг 4 ТЗ, критерий «логирование в критических точках»).
+	 * Ловит ЛЮБОЙ источник режима плавания — PhysicsVolume с Water Volume, собственный
+	 * триггер, Water Plugin: лог не привязан к конкретному актору воды.
+	 */
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode = 0) override;
 
 	/** Обычное перемещение по земле */
 	void Move(const FInputActionValue& Value);
@@ -107,11 +130,42 @@ protected:
 	/** Создаёт IA_Fire / IA_ToggleWeapon и WeaponMappingContext, если не назначены в BP */
 	void EnsureWeaponInputDefaults();
 
-	/** Нажатие кнопки выстрела — пробрасывается в текущее оружие */
-	void Fire();
+	/** Спринт: ускорение + флаг для AnimBP */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void StartSprint();
+
+	/** Конец спринта: вернуть обычную скорость */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void StopSprint();
+
+	/** Переключить присед (LeftCtrl) */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void ChangeCrouchState();
+
+	/** Можно ли сейчас бежать (не в воде, не в приседе, есть стамина) */
+	UFUNCTION(BlueprintPure, Category = "Character | Movement")
+	bool CanSprint() const;
+
+	/** Спринт (LeftShift, удержание) */
+	void OnSprintStarted();
+	void OnSprintCompleted();
+
+	/** Присед: камера через spring arm */
+	virtual void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
+	virtual void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
+
+public:
+	/** Бег включён (читает AnimInstance, поэтому public) */
+	UFUNCTION(BlueprintPure, Category = "Character | Movement")
+	bool IsSprinting() const { return bIsSprinting; }
+
+	/** Returns CameraBoom subobject **/
 
 	/** Правая кнопка мыши — альтернативный выстрел (снаряд из подствольника) */
 	void AltFire();
+
+	/** Нажатие кнопки выстрела — пробрасывается в текущее оружие */
+	void Fire();
 
 	/** Надеть/снять оружие */
 	void ToggleWeapon();
@@ -154,4 +208,8 @@ protected:
 	/** Режим стрейфа включён (персонаж с оружием: корпус по камере, ноги — в сторону движения) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Movement")
 	bool bIsStrafing = false;
+
+	/** Бег включён (для AnimBP и стамины в A3) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character | Movement")
+	bool bIsSprinting = false;
 };

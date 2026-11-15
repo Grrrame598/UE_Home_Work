@@ -45,6 +45,10 @@ void UMyPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	// Стрейф-локомоция: корпус по камере, ноги — по направлению ввода
 	bIsStrafing = CachedCharacter->IsStrafing();
 
+	// Спринт и присед (A2) — входы State Machine в ABP_Manny
+	bIsSprinting = CachedCharacter->IsSprinting();
+	bIsCrouching = CachedCharacter->bIsCrouched;
+
 	// Аналог UKismetAnimationLibrary::CalculateDirection — чтобы не зависеть от нод шаблона в AnimGraph
 	Direction = 0.f;
 	if (!Velocity.IsNearlyZero())

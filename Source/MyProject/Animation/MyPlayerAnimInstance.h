@@ -60,4 +60,27 @@ protected:
 	 *  Аналог bIsStrafing из референсного проекта: bIsStrafing = !bOrientRotationToMovement. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character animation")
 	bool bIsStrafing = false;
+
+	/** Бег (A2): вход состояния Sprint в State Machine. Пишет только C++, граф читает. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character animation")
+	bool bIsSprinting = false;
+
+	/** Присед (A2): вход состояния Crouch в State Machine. Пишет только C++, граф читает. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character animation")
+	bool bIsCrouching = false;
+
+	/** Стамина кончилась (A3): вход состояний AS_OutOfStamina_*. Пишет только C++, граф читает. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character animation")
+	bool bIsOutOfStamina = false;
+
+public:
+	/** Обход (A2): GET-ноды C++-свойств в AnimBP не появляются. Чтение без публичного поля. */
+	UFUNCTION(BlueprintPure, Category = "Character animation")
+	bool IsSprintingForAnimGraph() const { return bIsSprinting; }
+
+	UFUNCTION(BlueprintPure, Category = "Character animation")
+	bool IsCrouchingForAnimGraph() const { return bIsCrouching; }
+
+	UFUNCTION(BlueprintPure, Category = "Character animation")
+	bool IsOutOfStaminaForAnimGraph() const { return bIsOutOfStamina; }
 };
