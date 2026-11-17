@@ -32,7 +32,7 @@ AAttributeZoneBase::AAttributeZoneBase()
 		ZoneVisual->SetStaticMesh(CubeMesh.Object);
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> TranslucentMat(
-		TEXT("/Engine/EngineMaterials/DefaultTranslucentMaterial.DefaultTranslucentMaterial"));
+		TEXT("/Engine/EngineMaterials/DefaultMaterial.DefaultMaterial"));
 	if (TranslucentMat.Succeeded())
 	{
 		ZoneVisual->SetMaterial(0, TranslucentMat.Object);

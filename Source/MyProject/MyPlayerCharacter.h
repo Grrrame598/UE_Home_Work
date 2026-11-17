@@ -88,6 +88,10 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
 
+	/** Взаимодействие (E): двери, бочки и прочие интерактивные акторы */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
 	/** Скорость спринта, см/с */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Movement", meta = (AllowPrivateAccess = "true"))
 	float SprintSpeed = 800.f;
@@ -150,6 +154,19 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
 	void ChangeCrouchState();
+
+	/** Дальность взаимодействия по E, см */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character | Interaction")
+	float InteractTraceDistance = 300.f;
+
+	/** Радиус сферы при E, см — прощает неточное прицеливание */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character | Interaction", meta = (ClampMin = "1.0"))
+	float InteractTraceRadius = 60.f;
+
+	/** Взаимодействие (E): трассировка вперёд, вызов Interact() у интерактивного актора */
+	UFUNCTION(BlueprintCallable, Category = "Character | Interaction")
+	void Interact();
+
 
 	/** Можно ли сейчас бежать (не в воде, не в приседе, есть стамина) */
 	UFUNCTION(BlueprintPure, Category = "Character | Movement")

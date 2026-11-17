@@ -22,6 +22,7 @@
 #include "UObject/UObjectGlobals.h"
 #include "Components/CharacterComponents/CharacterEquipmentComponent.h"
 #include "Components/CharacterComponents/CharacterAttributesComponent.h"
+#include "Actors/Interactive/InteractiveActor.h"
 
 
 AMyPlayerCharacter::AMyPlayerCharacter()
@@ -254,6 +255,14 @@ void AMyPlayerCharacter::EnsureInputDefaults()
 			CrouchAction->bConsumeInput = false;
 		}
 		GroundMappingContext->MapKey(CrouchAction, EKeys::LeftControl);
+
+		if (!InteractAction)
+		{
+			InteractAction = NewObject<UInputAction>(this, TEXT("InteractAction"));
+			InteractAction->ValueType = EInputActionValueType::Boolean;
+			InteractAction->bConsumeInput = false;
+		}
+		GroundMappingContext->MapKey(InteractAction, EKeys::E);
 	}
 
 	// --- Плавание ---
@@ -345,6 +354,11 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 			EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::ChangeCrouchState);
 		}
 
+		if (InteractAction)
+		{
+			EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::Interact);
+		}
+
 		if (FireAction)
 		{
 			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::Fire);
@@ -365,6 +379,41 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 			EnhancedInputComponent->BindAction(ToggleShotOriginAction, ETriggerEvent::Started, this, &AMyPlayerCharacter::ToggleShotOrigin);
 		}
 	}
+}
+
+void AMyPlayerCharacter::Interact()
+{
+	UE_LOG(LogMyProject, Log, TEXT("[Interact] %s: нажата E"), *GetName());
+	if (!Controller)
+	{
+		UE_LOG(LogMyProject, Warning, TEXT("[Interact] нет Controller"));
+		return;
+	}
+
+	FVector ViewLocation;
+	FRotator ViewRotation;
+	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	const FVector TraceEnd = ViewLocation + ViewRotation.Vector() * InteractTraceDistance;
+
+	FHitResult Hit;
+	FCollisionQueryParams Params(SCENE_QUERY_STAT(InteractTrace), false, this);
+	const FCollisionShape TraceShape = FCollisionShape::MakeSphere(InteractTraceRadius);
+	if (GetWorld()->SweepSingleByChannel(Hit, ViewLocation, TraceEnd, FQuat::Identity, ECC_Visibility, TraceShape, Params))
+	{
+		UE_LOG(LogMyProject, Log, TEXT("[Interact] трасса попала в %s"), *GetNameSafe(Hit.GetActor()));
+		if (AActor* HitActor = Hit.GetActor())
+		{
+			if (HitActor->Implements<UInteractiveActor>())
+			{
+				// BlueprintNativeEvent нельзя звать напрямую (ассерт движка) — только через Execute_
+				IInteractiveActor::Execute_Interact(HitActor, this);
+				return;
+			}
+			UE_LOG(LogMyProject, Warning, TEXT("[Interact] %s не реализует IInteractiveActor"), *HitActor->GetName());
+		}
+	}
+
+	UE_LOG(LogMyProject, Log, TEXT("[Interact] %s: интерактивный объект не найден"), *GetName());
 }
 
 void AMyPlayerCharacter::Move(const FInputActionValue& Value)
