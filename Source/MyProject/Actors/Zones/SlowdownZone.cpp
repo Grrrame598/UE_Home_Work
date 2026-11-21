@@ -4,7 +4,7 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 #include "MyProject.h"
 
 ASlowdownZone::ASlowdownZone()

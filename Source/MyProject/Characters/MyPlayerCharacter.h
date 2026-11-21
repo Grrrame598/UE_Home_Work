@@ -7,10 +7,6 @@
 #include "InputActionValue.h"
 #include "MyPlayerCharacter.generated.h"
 
-class UInputMappingContext;
-class UInputAction;
-class UCharacterEquipmentComponent;
-
 /**
  * Собственный персонаж для задания «Продвинутое перемещение» (плавание).
  * Каркас: ACharacter + SpringArm + Camera + ориентирование по движению.
@@ -28,70 +24,6 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
-	/** Mapping context наземного управления (Move/Look/Jump). Создаётся в C++, если не назначен в BP */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* GroundMappingContext;
-
-	/** Move Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
-
-	/** Look Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookAction;
-
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
-
-	/** Swim forward Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SwimForwardAction;
-
-	/** Swim right Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SwimRightAction;
-
-	/** Swim up/down Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SwimUpAction;
-
-	/** Mapping context для осей плавания */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* SwimMappingContext;
-
-	/** Fire Input Action: левая кнопка мыши / правый триггер геймпада */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* FireAction;
-
-	/** Альтернативный выстрел: правая кнопка мыши (подствольник) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* AltFireAction;
-
-	/** Надеть/снять оружие (Q) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ToggleWeaponAction;
-
-	/** Переключение типа выстрела камера/дуло (R) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ToggleShotOriginAction;
-
-	/** Mapping context для оружия (Fire / ToggleWeapon) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* WeaponMappingContext;
-
-	/** Спринт (LeftShift, удержание) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SprintAction;
-
-	/** Присед (LeftCtrl, переключение) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* CrouchAction;
-
-	/** Взаимодействие (E): двери, бочки и прочие интерактивные акторы */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* InteractAction;
-
 	/** Скорость спринта, см/с */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character | Movement", meta = (AllowPrivateAccess = "true"))
 	float SprintSpeed = 800.f;
@@ -102,6 +34,27 @@ class MYPROJECT_API AMyPlayerCharacter : public ACharacter
 
 public:
 	AMyPlayerCharacter();
+
+	// --- B1: управление живёт в AMyPlayerController, он вызывает эти хендлеры ---
+
+	/** Обычное перемещение по земле */
+	void Move(const FInputActionValue& Value);
+
+	/** Поворот камеры */
+	void Look(const FInputActionValue& Value);
+
+	/** Плавание: вперед/назад с учетом Pitch+Yaw камеры */
+	void SwimForward(const FInputActionValue& Value);
+
+	/** Плавание: влево/вправо с учетом Yaw камеры */
+	void SwimRight(const FInputActionValue& Value);
+
+	/** Плавание: вверх/вниз по мировому Up */
+	void SwimUp(const FInputActionValue& Value);
+
+	/** Присед: переключение состояния */
+	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
+	void ChangeCrouchState();
 
 
 	/** Спринт: ускорение + флаг для AnimBP */
@@ -123,9 +76,15 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void NotifyControllerChanged() override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/** B1: прыжок инициирует контроллер — он проверяет CanJump перед вызовом Jump() */
 	virtual bool CanJumpInternal_Implementation() const override;
+
+public:
+	/** Публичная обёртка: контроллер не может звать protected CanJumpInternal_Implementation */
+	bool CanJumpPublic() const { return CanJumpInternal_Implementation(); }
+
+protected:
 
 	/**
 	 * Лог входа/выхода из воды (шаг 4 ТЗ, критерий «логирование в критических точках»).
@@ -134,27 +93,6 @@ protected:
 	 */
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode = 0) override;
 
-	/** Обычное перемещение по земле */
-	void Move(const FInputActionValue& Value);
-
-	/** Поворот камеры */
-	void Look(const FInputActionValue& Value);
-
-	/** Плавание: вперед/назад с учетом Pitch+Yaw камеры */
-	void SwimForward(const FInputActionValue& Value);
-
-	/** Плавание: влево/вправо с учетом Yaw камеры */
-	void SwimRight(const FInputActionValue& Value);
-
-	/** Плавание: вверх/вниз по мировому Up */
-	void SwimUp(const FInputActionValue& Value);
-
-	/** Создаёт IA_Fire / IA_ToggleWeapon и WeaponMappingContext, если не назначены в BP */
-	void EnsureWeaponInputDefaults();
-
-	UFUNCTION(BlueprintCallable, Category = "Character | Movement")
-	void ChangeCrouchState();
-
 	/** Дальность взаимодействия по E, см */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character | Interaction")
 	float InteractTraceDistance = 300.f;
@@ -162,11 +100,6 @@ protected:
 	/** Радиус сферы при E, см — прощает неточное прицеливание */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character | Interaction", meta = (ClampMin = "1.0"))
 	float InteractTraceRadius = 60.f;
-
-	/** Взаимодействие (E): трассировка вперёд, вызов Interact() у интерактивного актора */
-	UFUNCTION(BlueprintCallable, Category = "Character | Interaction")
-	void Interact();
-
 
 	/** Можно ли сейчас бежать (не в воде, не в приседе, есть стамина) */
 	UFUNCTION(BlueprintPure, Category = "Character | Movement")
@@ -192,6 +125,10 @@ public:
 
 	/** Нажатие кнопки выстрела — пробрасывается в текущее оружие */
 	void Fire();
+
+	/** Взаимодействие (E): трассировка вперёд, вызов Interact() у интерактивного актора */
+	UFUNCTION(BlueprintCallable, Category = "Character | Interaction")
+	void Interact();
 
 	/** Надеть/снять оружие */
 	void ToggleWeapon();

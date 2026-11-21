@@ -4,7 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "MyProject.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 
 UCharacterAttributesComponent::UCharacterAttributesComponent()
 {

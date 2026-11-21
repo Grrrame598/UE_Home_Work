@@ -3,7 +3,7 @@
 #include "Actors/Zones/DamageZone.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 #include "Components/BoxComponent.h"
 
 ADamageZone::ADamageZone()

@@ -4,7 +4,7 @@
 
 #include "Components/CharacterComponents/CharacterEquipmentComponent.h"
 #include "GameFramework/Character.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 
 void UMyPlayerAnimInstance::NativeInitializeAnimation()
 {

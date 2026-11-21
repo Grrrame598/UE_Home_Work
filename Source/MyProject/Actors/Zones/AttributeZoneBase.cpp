@@ -8,7 +8,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Materials/MaterialInterface.h"
 #include "Engine/World.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 #include "TimerManager.h"
 
 AAttributeZoneBase::AAttributeZoneBase()

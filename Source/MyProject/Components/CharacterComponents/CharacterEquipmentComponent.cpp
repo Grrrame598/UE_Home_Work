@@ -148,6 +148,8 @@ void UCharacterEquipmentComponent::EquipItem(EEquipableItemType ItemType)
 
 	if (USkeletalMeshComponent* CharacterMesh = CachedCharacter->GetMesh())
 	{
+		UE_LOG(LogTemp, Log, TEXT("[Equipment] в руки: %s (слот %d)"),
+			*Item->GetName(), static_cast<int32>(ItemType));
 		Item->OnEquipped(CharacterMesh, SocketCharacterWeapon);
 	}
 }

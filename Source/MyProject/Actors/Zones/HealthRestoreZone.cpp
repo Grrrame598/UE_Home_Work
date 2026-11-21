@@ -4,7 +4,7 @@
 
 #include "Components/BoxComponent.h"
 #include "Components/CharacterComponents/CharacterAttributesComponent.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 
 AHealthRestoreZone::AHealthRestoreZone()
 {

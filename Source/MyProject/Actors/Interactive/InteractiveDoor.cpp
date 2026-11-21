@@ -4,7 +4,7 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
-#include "MyPlayerCharacter.h"
+#include "Characters/MyPlayerCharacter.h"
 #include "MyProject.h"
 #include "UObject/ConstructorHelpers.h"
 
