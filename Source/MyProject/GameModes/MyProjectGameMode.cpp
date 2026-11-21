@@ -3,6 +3,7 @@
 #include "MyProjectGameMode.h"
 #include "Characters/MyPlayerCharacter.h"
 #include "GameModes/MyPlayerController.h"
+#include "UI/MyHUD.h"
 
 AMyProjectGameMode::AMyProjectGameMode()
 {
@@ -12,4 +13,7 @@ AMyProjectGameMode::AMyProjectGameMode()
 
 	// B1: управление живёт в контроллере
 	PlayerControllerClass = AMyPlayerController::StaticClass();
+
+	// A6: HUD (WBP_HUD задаётся в BP-наследнике GameMode)
+	HUDClass = AMyHUD::StaticClass();
 }

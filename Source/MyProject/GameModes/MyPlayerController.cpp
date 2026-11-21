@@ -1,6 +1,7 @@
 // B1: контроллер игрока — владелец Enhanced Input (шаг 2 ТЗ).
 
 #include "GameModes/MyPlayerController.h"
+#include "UI/MyHUD.h"
 
 #include "Characters/MyPlayerCharacter.h"
 #include "EnhancedInputComponent.h"
@@ -136,6 +137,10 @@ void AMyPlayerController::SetupInputComponent()
 	if (ToggleShotOriginAction)
 	{
 		EnhancedInputComponent->BindAction(ToggleShotOriginAction, ETriggerEvent::Started, this, &AMyPlayerController::OnToggleShotOrigin);
+	}
+	if (ReloadAction)
+	{
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AMyPlayerController::OnReload);
 	}
 }
 
@@ -304,6 +309,13 @@ void AMyPlayerController::EnsureInputDefaults()
 		ToggleShotOriginAction->bConsumeInput = false;
 	}
 
+	if (!ReloadAction)
+	{
+		ReloadAction = NewObject<UInputAction>(this, TEXT("IA_Reload"));
+		ReloadAction->ValueType = EInputActionValueType::Boolean;
+		ReloadAction->bConsumeInput = false;
+	}
+
 	if (!WeaponMappingContext)
 	{
 		WeaponMappingContext = NewObject<UInputMappingContext>(this, TEXT("IMC_Weapon"));
@@ -320,6 +332,9 @@ void AMyPlayerController::EnsureInputDefaults()
 
 		// Переключить тип выстрела (камера/дуло): R
 		WeaponMappingContext->MapKey(ToggleShotOriginAction, EKeys::R);
+
+		// Перезарядка: F (R занят переключением типа выстрела)
+		WeaponMappingContext->MapKey(ReloadAction, EKeys::F);
 	}
 }
 
@@ -433,6 +448,12 @@ void AMyPlayerController::OnToggleWeapon()
 	if (MyCharacter)
 	{
 		MyCharacter->ToggleWeapon();
+
+		// A6: HUD должен показать новое оружие и его патроны
+		if (AMyHUD* MyHud = Cast<AMyHUD>(GetHUD()))
+		{
+			MyHud->RefreshWeapon();
+		}
 	}
 }
 
@@ -441,5 +462,13 @@ void AMyPlayerController::OnToggleShotOrigin()
 	if (MyCharacter)
 	{
 		MyCharacter->ToggleShotOrigin();
+	}
+}
+
+void AMyPlayerController::OnReload()
+{
+	if (MyCharacter)
+	{
+		MyCharacter->ReloadWeapon();
 	}
 }

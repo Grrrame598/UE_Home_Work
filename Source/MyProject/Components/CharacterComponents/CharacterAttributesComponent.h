@@ -8,6 +8,9 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
+/** Атрибуты изменились: (HP в процентах, стамина в процентах). Подписывается HUD (A6) */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAttributesChanged, float, HealthPercent, float, StaminaPercent);
+
 /**
  * Здоровье и стамина персонажа.
  *  - HP приходит уроном через OnTakeAnyDamage (ApplyDamage из WeaponBarellComponent);
@@ -30,6 +33,10 @@ public:
 	/** Событие смерти (персонаж исчерпал HP) */
 	UPROPERTY(BlueprintAssignable, Category = "Attributes")
 	FOnDeath OnDeath;
+
+	/** Атрибуты изменились (HP/стамина в процентах) — для HUD */
+	UPROPERTY(BlueprintAssignable, Category = "Attributes")
+	FOnAttributesChanged OnAttributesChanged;
 
 	UFUNCTION(BlueprintPure, Category = "Attributes")
 	float GetHealth() const { return Health; }
@@ -90,4 +97,8 @@ private:
 
 	/** Аккумулятор для лога стамины раз в секунду */
 	float LogTimer = 0.f;
+
+	/** Последние разосланные в HUD значения (чтобы не спамить каждый тик) */
+	float LastHealthPercent = -1.f;
+	float LastStaminaPercent = -1.f;
 };

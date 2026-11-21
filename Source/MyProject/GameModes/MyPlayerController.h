@@ -56,6 +56,9 @@ protected:
 	void OnToggleWeapon();
 	void OnToggleShotOrigin();
 
+	/** A5: перезарядка текущего оружия (F) */
+	void OnReload();
+
 	// --- Ассеты ввода ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -105,6 +108,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* ToggleShotOriginAction;
+
+	/** A5: перезарядка (F) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* ReloadAction;
 
 private:
 	UPROPERTY(Transient)

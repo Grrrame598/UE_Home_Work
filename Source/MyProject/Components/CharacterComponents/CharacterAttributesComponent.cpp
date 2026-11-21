@@ -66,6 +66,17 @@ void UCharacterAttributesComponent::TickComponent(float DeltaTime, ELevelTick Ti
 			}
 		}
 	}
+
+	// HUD (A6): рассылаем проценты, когда они реально изменились
+	const float HealthPercent = GetHealthPercent();
+	const float StaminaPercent = GetStaminaPercent();
+	if (!FMath::IsNearlyEqual(HealthPercent, LastHealthPercent, 0.001f) ||
+		!FMath::IsNearlyEqual(StaminaPercent, LastStaminaPercent, 0.001f))
+	{
+		LastHealthPercent = HealthPercent;
+		LastStaminaPercent = StaminaPercent;
+		OnAttributesChanged.Broadcast(HealthPercent, StaminaPercent);
+	}
 }
 
 float UCharacterAttributesComponent::GetHealthPercent() const

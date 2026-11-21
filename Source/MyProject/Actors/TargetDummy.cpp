@@ -2,6 +2,7 @@
 
 #include "TargetDummy.h"
 
+#include "MyProject.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/DamageEvents.h"
 #include "Engine/Engine.h"
@@ -46,7 +47,7 @@ float ATargetDummy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	{
 		// Мишень «убита»: убираем с карты, но не удаляем актор,
 		// чтобы это было видно в PIE и в логе
-		UE_LOG(LogTemp, Warning, TEXT("[TargetDummy] %s destroyed"), *GetName());
+		UE_LOG(LogMyProject, Warning, TEXT("[TargetDummy] %s destroyed"), *GetName());
 		SetActorHiddenInGame(true);
 		SetActorEnableCollision(false);
 	}
@@ -57,7 +58,7 @@ float ATargetDummy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 void ATargetDummy::ShowHealth() const
 {
 	const FString Message = FString::Printf(TEXT("%s HP: %.0f / %.0f"), *GetName(), CurrentHealth, MaxHealth);
-	UE_LOG(LogTemp, Warning, TEXT("[TargetDummy] %s"), *Message);
+	UE_LOG(LogMyProject, Warning, TEXT("[TargetDummy] %s"), *Message);
 
 	if (GEngine)
 	{

@@ -130,6 +130,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character | Interaction")
 	void Interact();
 
+	/** A5: перезарядка текущего оружия (F) */
+	UFUNCTION(BlueprintCallable, Category = "Character | Weapon")
+	void ReloadWeapon();
+
 	/** Надеть/снять оружие */
 	void ToggleWeapon();
 

@@ -24,6 +24,9 @@
 #include "Components/CharacterComponents/CharacterEquipmentComponent.h"
 #include "Components/CharacterComponents/CharacterAttributesComponent.h"
 #include "Actors/Interactive/InteractiveActor.h"
+#include "Actors/Equipment/RangeWeaponItem.h"
+#include "GameModes/MyPlayerController.h"
+#include "UI/MyHUD.h"
 #include "Engine/OverlapResult.h"
 
 // ---------------------------------------------------------------------------
@@ -56,6 +59,15 @@ void AMyPlayerCharacter::ToggleWeapon()
 
 		// Поза/локомоция зависят от того, в руках ли оружие
 		SetStrafeMode(CharacterEquipmentComponent->IsEquipped());
+
+		// A6: оружие в слоте уже сменилось — HUD перечитывает его патроны
+		if (AMyPlayerController* PC = Cast<AMyPlayerController>(GetController()))
+		{
+			if (AMyHUD* MyHud = Cast<AMyHUD>(PC->GetHUD()))
+			{
+				MyHud->RefreshWeapon();
+			}
+		}
 	}
 }
 
@@ -64,6 +76,18 @@ void AMyPlayerCharacter::ToggleShotOrigin()
 	if (CharacterEquipmentComponent)
 	{
 		CharacterEquipmentComponent->ToggleShotOrigin();
+	}
+}
+
+void AMyPlayerCharacter::ReloadWeapon()
+{
+	if (ABaseWeapon* Weapon = CharacterEquipmentComponent ? CharacterEquipmentComponent->GetCurrentWeapon() : nullptr)
+	{
+		// Патроны живут в огнестрельном оружии (ARangeWeaponItem), база о них не знает
+		if (ARangeWeaponItem* RangeWeapon = Cast<ARangeWeaponItem>(Weapon))
+		{
+			RangeWeapon->StartReload();
+		}
 	}
 }
 
