@@ -2,6 +2,7 @@
 
 #include "CharacterEquipmentComponent.h"
 
+#include "MyProject.h"
 #include "Actors/Equipment/BaseWeapon.h"
 #include "Actors/Equipment/EquipableItem.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -50,7 +51,7 @@ void UCharacterEquipmentComponent::CreateLoadout()
 
 		if (!Item)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("[Equipment] Не удалось создать предмет %s"), *Pair.Value->GetName());
+			UE_LOG(LogMyProject, Warning, TEXT("[Equipment] Не удалось создать предмет %s"), *Pair.Value->GetName());
 			continue;
 		}
 
@@ -148,6 +149,8 @@ void UCharacterEquipmentComponent::EquipItem(EEquipableItemType ItemType)
 
 	if (USkeletalMeshComponent* CharacterMesh = CachedCharacter->GetMesh())
 	{
+		UE_LOG(LogMyProject, Log, TEXT("[Equipment] в руки: %s (слот %d)"),
+			*Item->GetName(), static_cast<int32>(ItemType));
 		Item->OnEquipped(CharacterMesh, SocketCharacterWeapon);
 	}
 }
@@ -171,7 +174,7 @@ void UCharacterEquipmentComponent::UnequipItem(EEquipableItemType ItemType)
 	}
 
 	// Кобуры/спины нет в скелете — прячем, чтобы оружие не висело в руках
-	UE_LOG(LogTemp, Warning, TEXT("[Equipment] Нет сокета '%s' для %s — предмет скрыт"),
+	UE_LOG(LogMyProject, Warning, TEXT("[Equipment] Нет сокета '%s' для %s — предмет скрыт"),
 		*HolsterSocket.ToString(), *Item->GetName());
 	Item->SetActorHiddenInGame(true);
 }

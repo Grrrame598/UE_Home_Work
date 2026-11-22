@@ -31,6 +31,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Explosion")
 	void Explode(AController* InstigatorController);
 
+	/** Назначить VFX взрыва из кода (в BP поле доступно в Details) */
+	UFUNCTION(BlueprintCallable, Category = "Explosion")
+	void SetExplosionVFX(UParticleSystem* InVFX) { ExplosionVFX = InVFX; }
+
 	/** Событие взрыва — сюда можно повесить звук, decal, спавн осколков в BP */
 	UPROPERTY(BlueprintAssignable, Category = "Explosion")
 	FOnExplosion OnExplosion;

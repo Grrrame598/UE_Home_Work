@@ -2,6 +2,7 @@
 
 #include "BaseWeapon.h"
 
+#include "MyProject.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/Weapon/WeaponBarellComponent.h"
 #include "Engine/Engine.h"
@@ -68,7 +69,7 @@ void ABaseWeapon::Shot()
 
 void ABaseWeapon::AltShot()
 {
-	UE_LOG(LogTemp, Warning, TEXT("[%s] AltShot: у этого оружия нет альтернативного выстрела"), *GetName());
+	UE_LOG(LogMyProject, Warning, TEXT("[%s] AltShot: у этого оружия нет альтернативного выстрела"), *GetName());
 }
 
 void ABaseWeapon::ToggleShotOrigin()
@@ -79,7 +80,7 @@ void ABaseWeapon::ToggleShotOrigin()
 	const FString Message = FString::Printf(TEXT("[%s] Shot origin: %s"), *GetName(),
 		ShotOriginType == EShotOrigin::Camera ? TEXT("Camera") : TEXT("Muzzle"));
 
-	UE_LOG(LogTemp, Log, TEXT("%s"), *Message);
+	UE_LOG(LogMyProject, Log, TEXT("%s"), *Message);
 
 	if (GEngine)
 	{

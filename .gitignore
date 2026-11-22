@@ -1,11 +1,3 @@
-# Private task notes
-/TZ_Swimming_CustomCharacter.md
-
-Need include in original. Since original already has docs lines at end. Need preserve all. Add those two lines after docs html line. Ensure no extra? Output only code.
-
-Need careful: Original code ends with docs/**/*.md and docs/**/*.html lines after # Private documentation. Suggested edit shows those lines and additional note. So we append. The file should include all original lines plus new comment and pattern. Maybe blank line? We can add after docs lines. Let's construct exactly.
-
-Original:
 # UE5 GitIgnore Template
 
 # Visual Studio / Rider
